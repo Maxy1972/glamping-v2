@@ -1,0 +1,94 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+  background-color: #090d16;
+  color: #f8fafc;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #090d16;
+  color: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Card container responsive */
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+h1, h2, h3, h4 {
+  color: #38bdf8;
+  margin-top: 0;
+}
+
+/* Status feedback */
+.success {
+  color: #4ade80;
+  font-weight: 600;
+}
+
+/* Pulsanti generali */
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* --- MEDIA QUERIES PER MOBILE E TABLET --- */
+
+/* Tablet (iPad e schermi medi) */
+@media (max-width: 768px) {
+  #root {
+    padding: 0.75rem;
+  }
+  
+  .card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Smartphone (schermi stretti) */
+@media (max-width: 480px) {
+  #root {
+    padding: 0.5rem;
+  }
+
+  .card {
+    padding: 0.85rem;
+    border-radius: 8px;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  /* Ottimizzazione pulsanti e griglie per schermi piccoli */
+  button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
