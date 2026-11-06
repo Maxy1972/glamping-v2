@@ -1,94 +1,97 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  color-scheme: dark;
-  background-color: #090d16;
-  color: #f8fafc;
+  color-scheme: light;
+  background-color: #f8fafc;
+  color: #1e293b;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #090d16;
-  color: #f8fafc;
+  background-color: #f8fafc;
+  color: #1e293b;
   -webkit-font-smoothing: antialiased;
 }
 
 #root {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Sidebar verde eco-resort naturale e rilassante */
+.sidebar {
+  width: 260px;
+  background-color: #0d3b2e;
+  color: #ffffff;
+  padding: 1.5rem 1rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   box-sizing: border-box;
 }
 
-/* Card container responsive */
+.main-content {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  background-color: #f8fafc;
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card container */
 .card {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
   width: 100%;
 }
 
 h1, h2, h3, h4 {
-  color: #38bdf8;
+  color: #0f172a;
   margin-top: 0;
 }
 
-/* Status feedback */
 .success {
-  color: #4ade80;
+  color: #059669;
   font-weight: 600;
+  font-size: 0.9rem;
 }
 
-/* Pulsanti generali */
 button {
   cursor: pointer;
   font-family: inherit;
 }
 
-/* --- MEDIA QUERIES PER MOBILE E TABLET --- */
-
-/* Tablet (iPad e schermi medi) */
 @media (max-width: 768px) {
-  #root {
-    padding: 0.75rem;
+  .app-container {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
   }
-  
-  .card {
+  .sidebar {
+    width: 100%;
+  }
+  .main-content {
     padding: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-  }
-}
-
-/* Smartphone (schermi stretti) */
-@media (max-width: 480px) {
-  #root {
-    padding: 0.5rem;
-  }
-
-  .card {
-    padding: 0.85rem;
-    border-radius: 8px;
-  }
-
-  h1 {
-    font-size: 1.3rem;
-  }
-
-  /* Ottimizzazione pulsanti e griglie per schermi piccoli */
-  button {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
+    height: auto;
   }
 }

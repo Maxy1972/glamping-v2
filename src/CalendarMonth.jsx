@@ -3,26 +3,39 @@ import { supabase } from './supabase'
 
 export default function CalendarMonth() {
   const [reservations, setReservations] = useState([])
+  const [units, setUnits] = useState([
+    { id: 1, name: 'Dome 01 Ocean View', type: 'TRANSPARENT DOME' },
+    { id: 2, name: 'Dome 02 Ocean View', type: 'TRANSPARENT DOME' },
+    { id: 3, name: '01 Luxury Tent ocean view', type: 'SAFARI TENT' },
+    { id: 4, name: 'Luxury Safari Tent 02', type: 'SAFARI TENT' },
+    { id: 5, name: 'Tent Sky Star 2x2 mt', type: 'SAFARI TENT' },
+    { id: 6, name: 'luxuri gazebo', type: 'TRANSPARENT DOME' }
+  ])
   const [currentDate, setCurrentDate] = useState(new Date())
 
   useEffect(() => {
-    fetchReservations()
+    fetchData()
   }, [])
 
-  async function fetchReservations() {
+  async function fetchData() {
     try {
-      const { data, error } = await supabase.from('reservation').select('*')
-      if (error) throw error
-      setReservations(data || [])
+      const { data: resData, error: resError } = await supabase.from('reservation').select('*')
+      if (resError) throw resError
+      setReservations(resData || [])
+
+      const { data: unitData, error: unitError } = await supabase.from('units').select('*')
+      if (!unitError && unitData && unitData.length > 0) {
+        setUnits(unitData)
+      }
     } catch (err) {
-      console.error('Error fetching reservations:', err.message)
+      console.error('Error fetching data:', err.message)
     }
   }
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
-  const firstDayIndex = new Date(year, month, 1).getDay()
   const totalDays = new Date(year, month + 1, 0).getDate()
+  const daysArray = Array.from({ length: totalDays }, (_, i) => i + 1)
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June", 
@@ -30,55 +43,69 @@ export default function CalendarMonth() {
   ]
 
   return (
-    <div className="card" style={{ marginTop: '2rem', textAlign: 'left' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h2 style={{ color: '#38bdf8', margin: 0 }}>
-          {monthNames[month]} {year}
-        </h2>
-        <div>
+    <div className="card">
+      
+      {/* INTESTAZIONE MESE E SCORRIMENTO */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+        <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 'bold', color: '#1e293b' }}>Monthly Schedule</h3>
+        
+        <div style={{ display: 'flex', alignItems: 'center', background: '#f1f5f9', borderRadius: '8px', padding: '0.2rem', border: '1px solid #cbd5e1' }}>
           <button 
             onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
-            style={{ background: '#334155', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', marginRight: '0.5rem' }}
+            style={{ background: 'transparent', border: 'none', padding: '0.3rem 0.6rem', cursor: 'pointer', fontWeight: 'bold', color: '#334155' }}
           >
-            Prev
+            &lt;
           </button>
+          <span style={{ padding: '0 0.75rem', fontWeight: '600', fontSize: '0.9rem', color: '#1e293b' }}>{monthNames[month]} {year}</span>
           <button 
             onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
-            style={{ background: '#334155', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 'none', padding: '0.3rem 0.6rem', cursor: 'pointer', fontWeight: 'bold', color: '#334155' }}
           >
-            Next
+            &gt;
           </button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', textAlign: 'center', fontWeight: 'bold', color: '#94a3b8', marginBottom: '0.5rem' }}>
-        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-      </div>
+      {/* GRIGLIA TIMELINE */}
+      <div style={{ width: '100%', overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: `220px repeat(${totalDays}, minmax(32px, 1fr))`, minWidth: `${220 + (totalDays * 32)}px` }}>
+          
+          <div style={{ background: '#f8fafc', padding: '10px 12px', fontWeight: 'bold', borderBottom: '2px solid #e2e8f0', borderRight: '1px solid #e2e8f0', fontSize: '0.85rem', color: '#475569' }}>
+            Units ({units.length})
+          </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px' }}>
-        {Array.from({ length: firstDayIndex }).map((_, index) => (
-          <div key={`empty-${index}`} style={{ minHeight: '80px', background: '#0f172a', opacity: 0.3, borderRadius: '6px' }}></div>
-        ))}
-
-        {Array.from({ length: totalDays }).map((_, index) => {
-          const dayNum = index + 1
-          return (
-            <div 
-              key={dayNum} 
-              style={{ 
-                minHeight: '80px', 
-                background: '#0f172a', 
-                padding: '8px', 
-                borderRadius: '6px',
-                border: '1px solid #334155',
-                position: 'relative'
-              }}
-            >
-              <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#f8fafc' }}>{dayNum}</span>
+          {daysArray.map(day => (
+            <div key={day} style={{ background: '#f8fafc', padding: '10px 2px', textAlign: 'center', fontWeight: '600', fontSize: '0.75rem', borderBottom: '2px solid #e2e8f0', borderRight: '1px solid #f1f5f9', color: '#64748b' }}>
+              {day}
             </div>
-          )
-        })}
+          ))}
+
+          {units.map((unit) => (
+            <React.Fragment key={unit.id}>
+              <div style={{ padding: '10px 12px', borderBottom: '1px solid #e2e8f0', borderRight: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <span style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{unit.type}</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{unit.name}</span>
+              </div>
+
+              {daysArray.map(day => (
+                <div 
+                  key={day} 
+                  style={{ 
+                    borderBottom: '1px solid #e2e8f0', 
+                    borderRight: '1px solid #f1f5f9', 
+                    minHeight: '85px', 
+                    background: '#fff',
+                    position: 'relative'
+                  }}
+                >
+                </div>
+              ))}
+            </React.Fragment>
+          ))}
+
+        </div>
       </div>
+
     </div>
   )
 }
